@@ -1,0 +1,23 @@
+from pydantic import BaseModel, Field
+from fastapi import FastAPI
+from agent import getAgentRes
+import uvicorn
+
+class RequestState(BaseModel):
+    query: str
+
+
+app = FastAPI()
+
+@app.post("/chat")
+def chat(request: RequestState):
+    """API endpoint to handle chat requests"""
+
+    res=getAgentRes(request.query)
+
+    return res
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=9999)
+
+

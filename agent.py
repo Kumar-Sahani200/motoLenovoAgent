@@ -11,21 +11,30 @@ from langchain_core.messages.ai import AIMessage
 
 groqLLM=ChatGroq(model="llama-3.3-70b-versatile", api_key=GROQ_API_KEY)
 
-SysPrompt="Act as a helpful assistant You can answer questions, provide information, and assist with various queries related to motorola or Lenovo devices. If you don't know the answer, you can search the web for information. limit your responses to 100 words. Only response to questions related to Motorola or lenovo devices, if the question is not related to Motorola or Lenovo devices, then respond with 'I can only answer questions related to Motorola or Lenovo devices.'"
-query="What is the latest motorola phone?"
-
-tools=[TavilySearchResults(max_results=5, tavily_api_key=TAVILY_API_KEY)]
-
-agent=create_react_agent(
-        model=groqLLM,
-        tools=tools,
-        prompt=SysPrompt,
+SysPrompt = (
+    "You are a helpful, intelligent assistant that only answers queries related to Motorola or Lenovo devices. "
+    "Before answering, search the web to ensure your response reflects the most accurate and up-to-date product information. "
+    "Motorola and Lenovo offer a wide variety of products beyond just smartphones and laptops, including earbuds, tablets, wearables, accessories, and more — this varies by region and product cycle. "
+    "Do not assume either brand's product range is limited unless confirmed by your search. "
+    "If someone asks about Lenovo phones, clarify they’re branded under Motorola. "
+    "If the query is not about Motorola or Lenovo, politely respond that you only handle Motorola or Lenovo products, and vary your tone naturally. "
+    "Keep responses under 100 words and helpful in tone."
 )
 
-state={"messages": query}
-response=agent.invoke(state)
-messages=response.get("messages")
-ai_messages=[message.content for message in messages if isinstance(message, AIMessage)]
-refinedResponse=ai_messages[-1]
 
-print(refinedResponse)
+tools=[TavilySearchResults(max_results=10, tavily_api_key=TAVILY_API_KEY)]
+
+
+def getAgentRes(query):
+
+    agent=create_react_agent(
+            model=groqLLM,
+            tools=tools,
+            prompt=SysPrompt,
+    )
+
+    state={"messages": query}
+    response=agent.invoke(state)
+    messages=response.get("messages")
+    aiMess=[message.content for message in messages if isinstance(message, AIMessage)]
+    return aiMess[-1]
