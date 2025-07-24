@@ -13,15 +13,11 @@ app = FastAPI()
 @app.get("/")
 def read_root():   
     """Root endpoint to check if the server is running"""
-    return  """
-    <h2>Welcome to the MotoLeno Agent API!</h2>
-    <p>This API provides information about Motorola and Lenovo devices.</p>
-    <p>
-        <a href="https://motolenovoagent.onrender.com/docs" target="_blank">API Endpoint</a><br>
-        <a href="https://github.com/Kumar-Sahani200/motoLenovoAgent" target="_blank">Git Repository</a><br>
-        <a href="https://miro.com/app/board/uXjVJbEjR4U=/?share_link_id=258247562034" target="_blank">System Design</a>
-    </p>
-    """
+    return {"message": "Welcome to the MotoLeno Agent API!",
+            "description": "This API provides information about Motorola and Lenovo devices.",
+            "api endpoint": "https://motolenovoagent.onrender.com/docs", 
+            "git repository": "https://github.com/Kumar-Sahani200/motoLenovoAgent",
+            "System Design": "https://miro.com/app/board/uXjVJbEjR4U=/?share_link_id=258247562034"}
 
 @app.post("/chat")
 def chat(request: RequestState):
