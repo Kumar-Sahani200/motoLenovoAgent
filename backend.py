@@ -4,7 +4,7 @@ from agent import getAgentRes
 import uvicorn
 
 class RequestState(BaseModel):
-    query: str
+    query: str = Field(..., example="What is the latest Motorola phone?")
 
 
 app = FastAPI()
